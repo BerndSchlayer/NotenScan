@@ -1,0 +1,9 @@
+Hallo {{ username or '' }},
+
+Sie wurden zur Organisation '{{ org_name }}' eingeladen um die Anwendung Notenscann nutzen zu können.
+
+Bitte loggen Sie sich über folgenden Link ein:
+{{ login_url }}
+
+Viele Grüße
+Ihr Notenplattform-Team
