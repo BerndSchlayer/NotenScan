@@ -1,0 +1,19 @@
+{
+  "prev": "Zurück",
+  "next": "Weiter",
+  "page": "Seite",
+  "of": "von",
+  "download": "Herunterladen",
+  "no_pdf": "Kein PDF geladen.",
+  "error": "Fehler beim Laden des PDF.",
+  "reset": "Zurücksetzen",
+  "selected_ocr_text": "Ausgewählter OCR-Text:",
+  "select_ocr_area": "Bitte wählen Sie einen OCR-Bereich aus...",
+  "assign_label": "Markierung zuweisen:",
+  "assigned_fields": "Zugewiesene Felder:",
+  "Titel": "Titel",
+  "Komponist": "Komponist",
+  "Arrangeur": "Arrangeur",
+  "Stimme": "Stimme",
+  "Genre": "Genre"
+}

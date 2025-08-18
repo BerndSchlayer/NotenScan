@@ -1,0 +1,10 @@
+{
+  "app_name": "NotenApp",
+  "dashboard_select_feature": "Bitte wähle ein Feature aus dem Menü.",
+  "feature_voicescan": "Notenscan",
+  "feature_users": "Benutzer",
+  "feature_organisations": "Organisationen",
+  "feature_documents_upload": "Notensatz Hochladen",
+  "error": "Fehler",
+  "close": "Schließen"
+}

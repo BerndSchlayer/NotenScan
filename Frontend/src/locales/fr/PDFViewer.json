@@ -1,0 +1,19 @@
+{
+  "prev": "Précédent",
+  "next": "Suivant",
+  "page": "Page",
+  "of": "de",
+  "download": "Télécharger",
+  "no_pdf": "Aucun PDF chargé.",
+  "error": "Erreur lors du chargement du PDF.",
+  "reset": "Réinitialiser",
+  "selected_ocr_text": "Texte OCR sélectionné :",
+  "select_ocr_area": "Veuillez sélectionner une zone OCR...",
+  "assign_label": "Assigner une étiquette :",
+  "assigned_fields": "Champs assignés :",
+  "Titel": "Titre",
+  "Komponist": "Compositeur",
+  "Arrangeur": "Arrangeur",
+  "Stimme": "Voix",
+  "Genre": "Genre"
+}

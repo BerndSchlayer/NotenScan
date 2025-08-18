@@ -1,0 +1,10 @@
+{
+  "app_name": "NotenApp",
+  "dashboard_select_feature": "Veuillez choisir une fonctionnalité dans le menu.",
+  "feature_voicescan": "Scan de partitions",
+  "feature_users": "Utilisateurs",
+  "feature_organisations": "Organisations",
+  "feature_documents_upload": "Télécharger une partition",
+  "error": "Erreur",
+  "close": "Fermer"
+}

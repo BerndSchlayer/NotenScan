@@ -1,0 +1,19 @@
+{
+  "prev": "Previous",
+  "next": "Next",
+  "page": "Page",
+  "of": "of",
+  "download": "Download",
+  "no_pdf": "No PDF loaded.",
+  "error": "Error loading PDF.",
+  "reset": "Reset",
+  "selected_ocr_text": "Selected OCR text:",
+  "select_ocr_area": "Please select an OCR area...",
+  "assign_label": "Assign label:",
+  "assigned_fields": "Assigned fields:",
+  "Titel": "Title",
+  "Komponist": "Composer",
+  "Arrangeur": "Arranger",
+  "Stimme": "Voice",
+  "Genre": "Genre"
+}

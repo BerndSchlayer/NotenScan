@@ -1,0 +1,43 @@
+{
+  "name": "@schlayer-consulting/sc-base-frontend",
+  "version": "0.1.0",
+  "private": false,
+  "description": "Wiederverwendbare React Komponenten und Hooks für interne Projekte.",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "dev": "tsup src/index.ts --format cjs,esm --watch",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "sync": "npm run build && yalc push"
+  },
+  "peerDependencies": {
+    "i18next": ">=25",
+    "lucide-react": ">=0.400.0",
+    "react": ">=18",
+    "react-dom": ">=18",
+    "react-easy-crop": ">=5",
+    "react-hot-toast": ">=2",
+    "react-i18next": ">=15",
+    "react-router-dom": ">=6",
+    "react-hook-form": ">=7"
+  },
+  "license": "UNLICENSED",
+  "dependencies": {
+    "@schlayer-consulting/sc-base-frontend": "file:.yalc/@schlayer-consulting/sc-base-frontend",
+    "date-fns": "^4.1.0",
+    "xlsx": "^0.18.5"
+  },
+  "yalcSig": "95e379aa4976e11d93c36f43ee75d581"
+}

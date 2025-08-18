@@ -1,0 +1,10 @@
+{
+  "app_name": "NotenApp",
+  "dashboard_select_feature": "Please select a feature from the menu.",
+  "feature_voicescan": "Music Scan",
+  "feature_users": "Users",
+  "feature_organisations": "Organisations",
+  "feature_documents_upload": "Upload Music Score",
+  "error": "Error",
+  "close": "Close"
+}

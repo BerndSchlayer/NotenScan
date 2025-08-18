@@ -1,0 +1,16 @@
+{
+  "folders": [
+	{
+		"name": "SC_BaseBackend",
+		"path": "../SC_BaseBackend"
+	},
+	{
+		"name": "SC_BaseFrontend",
+		"path": "../SC_BaseFrontend"
+	},
+	{
+		"name": "Notenscan",
+		"path": "."
+	}
+]
+}
