@@ -40,4 +40,9 @@ Thumbs.db
 
 # Docker lokal
 docker-compose.override.yml
+
+# yalc Artefakte (nicht committen)
+yalc.lock
+yalc.sig
+.yalc/
 	

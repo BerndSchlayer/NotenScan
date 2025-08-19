@@ -18,6 +18,7 @@
   "scripts": {
     "build": "tsup src/index.ts --format cjs,esm --dts",
     "dev": "tsup src/index.ts --format cjs,esm --watch",
+    "dev:yalc": "tsup src/index.ts --format cjs,esm --dts --watch --onSuccess \"yalc push\"",
     "lint": "eslint .",
     "test": "vitest run",
     "sync": "npm run build && yalc push"
@@ -31,13 +32,15 @@
     "react-hot-toast": ">=2",
     "react-i18next": ">=15",
     "react-router-dom": ">=6",
-    "react-hook-form": ">=7"
+    "react-hook-form": ">=7",
+    "@hookform/resolvers": ">=3",
+    "zod": ">=3"
   },
   "license": "UNLICENSED",
   "dependencies": {
-    "@schlayer-consulting/sc-base-frontend": "file:.yalc/@schlayer-consulting/sc-base-frontend",
     "date-fns": "^4.1.0",
-    "xlsx": "^0.18.5"
+    "xlsx": "^0.18.5",
+    "zod": "^4.0.17"
   },
-  "yalcSig": "95e379aa4976e11d93c36f43ee75d581"
+  "yalcSig": "9e2f1390eb98b3210cf64fcf4e7504f0"
 }
