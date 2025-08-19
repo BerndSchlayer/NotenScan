@@ -38,15 +38,6 @@ app.include_router(musicsheets.router, prefix=api_prefix)
 app.include_router(voices.router, prefix=api_prefix)
 app.include_router(pdf_tasks.router, prefix=api_prefix)
 
-
-# Basis-OAuth- und PDF-Tasks-Router nur mit Präfix einbinden
-
-# Optional: Basis-Info-Router unter API-Präfix bereitstellen
-try:
-    
-except Exception:
-    pass
-
 # Static-Verzeichnis erstellen in dem die generierten PDFs gespeichert werden
 os.makedirs(STATIC_DIR, exist_ok=True)
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
