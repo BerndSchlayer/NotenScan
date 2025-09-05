@@ -1,9 +1,10 @@
-import React, { Suspense, lazy, useEffect } from "react";
-import useSidebarCollapsed from "../hooks/useSidebarCollapsed";
+import React, { Suspense, lazy, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useMatch } from "react-router-dom";
 import { FileText, User, Users } from "lucide-react";
-import VoiceScanPage from "../pages/VoiceScanPage";
+const VoiceScanPage = lazy(() =>
+  import("../pages/VoiceScanPage").then((m) => ({ default: m.default }))
+);
 const UsersPage = lazy(() =>
   import("@schlayer-consulting/sc-base-frontend").then((m) => ({
     default: m.UsersPage,
@@ -52,18 +53,33 @@ const AppShell: React.FC<AppShellProps> = ({ globalError, setGlobalError }) => {
   const SERVER_URL = import.meta.env.VITE_SERVER_URL || window.location.origin;
   const API_BASE = `${SERVER_URL}/api/v1`;
 
-  // Sidebar Collapsed State mit Persistenz (Hook)
+  // Sidebar Collapsed State mit Persistenz
   const STORAGE_KEY = "notenscan.sidebarCollapsed";
-  // useSidebarCollapsed gibt [collapsed, setCollapsed]
-  const [sidebarCollapsed, setSidebarCollapsed] = useSidebarCollapsed(
-    STORAGE_KEY,
-    false
-  );
+  const [sidebarCollapsed, setSidebarCollapsed] = useState<boolean>(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved !== null) return JSON.parse(saved);
+    } catch {}
+    // Default: auf kleinen Screens collapsed
+    if (typeof window !== "undefined") {
+      return (
+        window.matchMedia && window.matchMedia("(max-width: 1024px)").matches
+      );
+    }
+    return false;
+  });
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(sidebarCollapsed));
+    } catch {}
+  }, [sidebarCollapsed]);
 
   // Prefetch-Handler
   const prefetchFeature = (key: string) => {
     if (key === "documentsupload") {
       import("../pages/DocumentUploadPage");
+    } else if (key === "voicescan") {
+      import("../pages/VoiceScanPage");
     } else if (key === "users") {
       import("@schlayer-consulting/sc-base-frontend").then((m) => m.UsersPage);
     } else if (key === "organisations") {
@@ -81,7 +97,7 @@ const AppShell: React.FC<AppShellProps> = ({ globalError, setGlobalError }) => {
   const matchDocuments = useMatch("/documentsupload");
   const matchDocumentsDetail = useMatch("/documentsupload/:id");
 
-  let feature = "documentsupload";
+  let feature: string | undefined = undefined;
   let userId: number | null = null;
   let organisationId: number | null = null;
   let documentId: string | undefined = undefined;
@@ -216,7 +232,7 @@ const AppShell: React.FC<AppShellProps> = ({ globalError, setGlobalError }) => {
         label: t(f.label),
         icon: React.createElement(f.icon, { size: 20 }),
       }))}
-      activeKey={feature}
+  activeKey={feature ?? ""}
       onSelect={handleMenuClick}
       onPrefetch={prefetchFeature}
     >
