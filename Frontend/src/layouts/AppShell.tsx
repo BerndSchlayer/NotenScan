@@ -1,4 +1,5 @@
-import React, { Suspense, lazy, useEffect, useState } from "react";
+import React, { Suspense, lazy, useEffect } from "react";
+import useSidebarCollapsed from "../hooks/useSidebarCollapsed";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useMatch } from "react-router-dom";
 import { FileText, User, Users } from "lucide-react";
@@ -51,26 +52,13 @@ const AppShell: React.FC<AppShellProps> = ({ globalError, setGlobalError }) => {
   const SERVER_URL = import.meta.env.VITE_SERVER_URL || window.location.origin;
   const API_BASE = `${SERVER_URL}/api/v1`;
 
-  // Sidebar Collapsed State mit Persistenz
+  // Sidebar Collapsed State mit Persistenz (Hook)
   const STORAGE_KEY = "notenscan.sidebarCollapsed";
-  const [sidebarCollapsed, setSidebarCollapsed] = useState<boolean>(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved !== null) return JSON.parse(saved);
-    } catch {}
-    // Default: auf kleinen Screens collapsed
-    if (typeof window !== "undefined") {
-      return (
-        window.matchMedia && window.matchMedia("(max-width: 1024px)").matches
-      );
-    }
-    return false;
-  });
-  useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(sidebarCollapsed));
-    } catch {}
-  }, [sidebarCollapsed]);
+  // useSidebarCollapsed gibt [collapsed, setCollapsed]
+  const [sidebarCollapsed, setSidebarCollapsed] = useSidebarCollapsed(
+    STORAGE_KEY,
+    false
+  );
 
   // Prefetch-Handler
   const prefetchFeature = (key: string) => {
