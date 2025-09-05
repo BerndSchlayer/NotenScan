@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-set -euo pipefail
-node "$(git rev-parse --show-toplevel)/scripts/check-yalc.cjs"
