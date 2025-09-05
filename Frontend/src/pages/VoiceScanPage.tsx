@@ -2,10 +2,14 @@
 import React, { useState, useRef, lazy } from "react";
 import PDFViewer from "../components/PDFViewer";
 const LoadingOverlay = lazy(() =>
-  import("@schlayer-consulting/sc-base-frontend").then((m) => ({ default: m.LoadingOverlay }))
+  import("@schlayer-consulting/sc-base-frontend").then((m) => ({
+    default: m.LoadingOverlay,
+  }))
 );
 const DataGrid = lazy(() =>
-  import("@schlayer-consulting/sc-base-frontend").then((m) => ({ default: m.DataGrid }))
+  import("@schlayer-consulting/sc-base-frontend").then((m) => ({
+    default: m.DataGrid,
+  }))
 );
 import { useTranslation } from "react-i18next";
 

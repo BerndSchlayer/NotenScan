@@ -1,7 +1,9 @@
 import React, { Suspense, lazy } from "react";
 import { Trash2 } from "lucide-react";
 const FloatingSelect = lazy(() =>
-  import("@schlayer-consulting/sc-base-frontend").then((m) => ({ default: m.FloatingSelect }))
+  import("@schlayer-consulting/sc-base-frontend").then((m) => ({
+    default: m.FloatingSelect,
+  }))
 );
 
 const labelColors = {
@@ -71,20 +73,20 @@ const OcrLabelAssignment: React.FC<OcrLabelAssignmentProps> = ({
                 }}
               />
               <div className="pl-3">
-                <Suspense fallback={<div />}> 
-                <FloatingSelect
-                  label={t(key, key)}
-                  value={getValidDropdownValue(key as LabelKeys)}
-                  onChange={(value) => {
-                    if (typeof value === "string")
-                      handleLabelChange(key as LabelKeys, value);
-                  }}
-                  options={boxes.map((box, idx) => ({
-                    value: String(idx),
-                    label: box.text,
-                  }))}
-                  clearable={true}
-                />
+                <Suspense fallback={<div />}>
+                  <FloatingSelect
+                    label={t(key, key)}
+                    value={getValidDropdownValue(key as LabelKeys)}
+                    onChange={(value) => {
+                      if (typeof value === "string")
+                        handleLabelChange(key as LabelKeys, value);
+                    }}
+                    options={boxes.map((box, idx) => ({
+                      value: String(idx),
+                      label: box.text,
+                    }))}
+                    clearable={true}
+                  />
                 </Suspense>
               </div>
             </div>

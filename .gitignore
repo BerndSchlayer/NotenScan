@@ -45,4 +45,4 @@ docker-compose.override.yml
 yalc.lock
 yalc.sig
 .yalc/
-	
+	Frontend/stats.html
