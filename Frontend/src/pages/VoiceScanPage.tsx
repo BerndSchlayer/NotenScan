@@ -455,18 +455,20 @@ export default function VoiceScanPage({
 
   // Spalten für DataGrid der Stimmen
   const voicesColumns = [
-    { key: "page", label: t("voices_column_page") },
+    { key: "page", label: t("voices_column_page"), type: "number" },
     {
       key: "numPages",
       label: t("voices_column_numPages"),
+      type: "number",
       width: 80,
       minWidth: 60,
       maxWidth: 100,
     },
-    { key: "titleFound", label: t("voices_column_titleFound") },
+    { key: "titleFound", label: t("voices_column_titleFound"), type: "string" },
     {
       key: "voice",
       label: t("voices_column_voice"),
+      type: "string",
       render: (val: string, row: VoiceResult) => (
         <button
           type="button"
@@ -485,6 +487,7 @@ export default function VoiceScanPage({
     {
       key: "__actions",
       label: t("voices_column_actions"),
+      type: "string",
       style: { width: 120, minWidth: 100, maxWidth: 140 },
     },
   ];
@@ -566,7 +569,7 @@ export default function VoiceScanPage({
               {t("voices_table_title")}
             </h2>
             <DataGrid
-              columns={voicesColumns}
+              columns={voicesColumns as any}
               data={voices}
               idField="page"
               pageSize={20}
