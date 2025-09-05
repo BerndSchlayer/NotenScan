@@ -11,6 +11,10 @@
 	{
 		"name": "Notenscan",
 		"path": "."
+	},
+	{
+		"name": "KidsCare",
+		"path": "../KidsCare"
 	}
 ]
 }
