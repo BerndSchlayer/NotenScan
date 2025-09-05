@@ -1,9 +1,0 @@
-{
-  "version": "v1",
-  "packages": {
-    "@schlayer-consulting/sc-base-frontend": {
-      "signature": "95e379aa4976e11d93c36f43ee75d581",
-      "file": true
-    }
-  }
-}
