@@ -194,7 +194,7 @@ const AppShell: React.FC<AppShellProps> = ({ globalError, setGlobalError }) => {
         <>
           {userInfo?.username && (
             <span
-              className="text-base font-medium text-blue-700 truncate max-w-[120px]"
+              className="text-base font-medium text-blue-700 truncate max-w-[280px] whitespace-nowrap"
               title={userInfo.username}
             >
               {userInfo.username}
