@@ -1,11 +1,4 @@
-#!/bin/sh
-# pre-commit Hook
-# Führt den yalc-Check aus, um Commits mit yalc-Artefakten zu verhindern und package.json mit file:.yalc zu entstagen.
-
-node "$(git rev-parse --show-toplevel)/check-yalc.js"
-RESULT=$?
-if [ $RESULT -ne 0 ]; then
-  exit $RESULT
-fi
-
-exit 0
+#!/usr/bin/env bash
+set -euo pipefail
+# Run yalc checks
+node "$(git rev-parse --show-toplevel)/scripts/check-yalc.js"

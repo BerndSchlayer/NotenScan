@@ -1,19 +1,19 @@
-#!/bin/sh
-# post-commit Hook auf Repo-Root-Ebene
-# Reaktiviert yalc im Frontend automatisch, falls package.json nicht bereits file:.yalc enthält.
+#!/usr/bin/env bash
+set -euo pipefail
 
-FRONTEND_DIR="Frontend"
+# Nach erfolgreichem Commit yalc im Frontend wieder aktivieren,
+# damit die lokale Entwicklung direkt weitergeht.
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+FRONTEND_DIR="$REPO_ROOT/Frontend"
 PKG_JSON="$FRONTEND_DIR/package.json"
-PKG_NAME="@schlayer-consulting/sc-base-frontend"
 
 if [ -f "$PKG_JSON" ]; then
-  # Prüfe, ob file:.yalc im aktuellen Arbeitsstand enthalten ist
-  if ! grep -q "file:.yalc" "$PKG_JSON"; then
-    echo "post-commit: Reaktiviere yalc im Frontend..."
-    (cd "$FRONTEND_DIR" && npx yalc add "$PKG_NAME")
-  else
-    echo "post-commit: yalc ist bereits aktiv (package.json enthält file:.yalc)."
+  # Nur re-aktivieren, wenn nicht bereits file:.yalc gesetzt ist
+  if ! grep -q '"@schlayer-consulting/sc-base-frontend"\s*:\s*"file:\.yalc' "$PKG_JSON"; then
+    (
+      cd "$FRONTEND_DIR"
+      # leise versuchen; wenn yalc nicht installiert ist, nicht fehlschlagen
+      npx yalc add @schlayer-consulting/sc-base-frontend >/dev/null 2>&1 || true
+    )
   fi
 fi
-
-exit 0

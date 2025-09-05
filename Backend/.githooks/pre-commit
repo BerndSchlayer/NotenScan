@@ -1,4 +1,0 @@
-#!/usr/bin/env bash
-set -euo pipefail
-# Run yalc checks
-node "$(git rev-parse --show-toplevel)/scripts/check-yalc.js"
