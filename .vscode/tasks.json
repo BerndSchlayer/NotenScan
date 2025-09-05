@@ -1,0 +1,20 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Notenscan: enable git hooks",
+      "type": "shell",
+      "command": "git config core.hooksPath .githooks",
+      "options": { "cwd": "${workspaceFolder}:Notenscan" },
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "Notenscan: test yalc check",
+      "type": "shell",
+      "command": "node scripts/check-yalc.js",
+      "options": { "cwd": "${workspaceFolder}:Notenscan" },
+      "problemMatcher": []
+    }
+  ]
+}
