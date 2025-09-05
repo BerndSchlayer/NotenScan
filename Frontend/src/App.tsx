@@ -24,9 +24,9 @@ export default function App() {
     return <LoginPage apiBase={API_BASE} debug={isDebugMode} onLogin={login} />;
   };
   return (
-    <AppProviders>
-      <DebugBanner enabled={isDebugMode} />
-      <AuthProvider apiBase={API_BASE}>
+    <AuthProvider apiBase={API_BASE}>
+      <AppProviders>
+        <DebugBanner enabled={isDebugMode} />
         <Routes>
           <Route
             path="/documentsupload/:id"
@@ -51,7 +51,7 @@ export default function App() {
             }
           />
         </Routes>
-      </AuthProvider>
-    </AppProviders>
+      </AppProviders>
+    </AuthProvider>
   );
 }
