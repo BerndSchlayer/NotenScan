@@ -1,6 +1,6 @@
 import { ScanText, ChevronLeft, ChevronRight } from "lucide-react";
 import React, { useEffect, useState, useRef, Suspense, lazy } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 const PDFViewer = lazy(() => import("../components/PDFViewer"));
 const OcrLabelAssignment = lazy(
   () => import("../components/OcrLabelAssignment")
@@ -8,7 +8,10 @@ const OcrLabelAssignment = lazy(
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { MasterDataTemplate } from "@schlayer-consulting/sc-base-frontend";
+import {
+  MasterDataTemplate,
+  makeColumns,
+} from "@schlayer-consulting/sc-base-frontend";
 
 // Typen für OCR-Boxen und Labels
 interface Box {
@@ -573,8 +576,10 @@ const DocumentUploadPage: React.FC<DocumentUploadPageProps> = ({
   initialId,
   token,
 }) => {
-  // ViewRow-Logik wird jetzt zentral im MasterDataTemplate gehandhabt
-  const [viewRow, setViewRow] = useState<any | null>(null);
+  // Selection is handled by MasterDataTemplate via route params; derive current detail id from route
+  const params = useParams();
+  const routeId = params.id ?? initialId ?? undefined;
+  const detailOpen = !!routeId;
   // Ref für Detailansicht
   const detailCardRef = React.useRef<DocumentDetailCardHandle>(null);
 
@@ -609,20 +614,10 @@ const DocumentUploadPage: React.FC<DocumentUploadPageProps> = ({
 
   // Effekt: Prüfe, ob Detailansicht geöffnet ist und Boxen leer sind
   useEffect(() => {
-    // Nur prüfen, wenn Detailansicht offen ist
-    if (viewRow && viewRow.status === "done") {
-      // Hole Boxen für aktuelle Seite aus PDFViewer/DetailCard
-      // Da die Boxen im DetailCard State sind, hole sie über einen ImperativeHandle
-      // Alternativ: Boxen als State im DocumentUploadPage pflegen (hier: über Callback)
-      // Wir nutzen einen kleinen Workaround: PDFViewer ruft onBoxChange, wir setzen detailBoxes
-      // Initial: Wenn viewRow wechselt, Boxen zurücksetzen
-      setDetailBoxes(null);
-      setShowNoOcrOverlay(false);
-    } else {
-      setDetailBoxes(null);
-      setShowNoOcrOverlay(false);
-    }
-  }, [viewRow, currentPage]);
+    // Reset detail-related transient state when navigating between list/detail or page changes
+    setDetailBoxes(null);
+    setShowNoOcrOverlay(false);
+  }, [routeId, currentPage]);
   const navigate = useNavigate();
   const { t, i18n } = useTranslation("DocumentUploadPage");
   const [showUploadDialog, setShowUploadDialog] = useState(false);
@@ -651,15 +646,13 @@ const DocumentUploadPage: React.FC<DocumentUploadPageProps> = ({
     return val;
   };
 
-  const columns = React.useMemo(
-    () => [
-      {
-        key: "filename",
-        label: t("filename"),
-      },
+  const columns = React.useMemo(() => {
+    const entries = [
+      { key: "filename", label: t("filename"), type: "string" as const },
       {
         key: "status",
         label: t("status"),
+        type: "string" as const,
         render: renderStatus,
         displayValue: (val: string) => {
           if (val === "done") return t("status_done");
@@ -668,18 +661,11 @@ const DocumentUploadPage: React.FC<DocumentUploadPageProps> = ({
           return val;
         },
       },
-      {
-        key: "num_pages",
-        label: t("num_pages"),
-      },
-      {
-        key: "created_at",
-        label: t("created_at"),
-        type: "datetime",
-      },
-    ],
-    [i18n.language, t]
-  );
+      { key: "num_pages", label: t("num_pages"), type: "number" as const },
+      { key: "created_at", label: t("created_at"), type: "datetime" as const },
+    ];
+    return makeColumns(entries);
+  }, [i18n.language, t]);
 
   const [data, setData] = useState<any[]>([]);
   const dataRef = useRef<any[]>(data);
@@ -729,12 +715,12 @@ const DocumentUploadPage: React.FC<DocumentUploadPageProps> = ({
   const [pdfLoading, setPdfLoading] = useState(false);
   const [pdfError, setPdfError] = useState<string | null>(null);
 
-  // Lädt die Seitenbilder, wenn Status 'done' und viewRow gesetzt
+  // Lädt die Seitenbilder, wenn ein Detail geöffnet ist (routeId) und Status 'done'
   useEffect(() => {
-    if (viewRow && viewRow.status === "done" && viewRow.id) {
+    if (detailOpen && routeId) {
       setPdfLoading(true);
       setPdfError(null);
-      fetch(`${API_BASE}/pdf_tasks/pages/${viewRow.id}`, {
+      fetch(`${API_BASE}/pdf_tasks/pages/${routeId}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
         .then((res) => {
@@ -754,7 +740,7 @@ const DocumentUploadPage: React.FC<DocumentUploadPageProps> = ({
       setPdfError(null);
       setPdfLoading(false);
     }
-  }, [viewRow, token]);
+  }, [detailOpen, routeId, token]);
 
   // fetchData als eigene Funktion, damit sie auch für onAfterSave genutzt werden kann
   const fetchData = async () => {
@@ -792,7 +778,8 @@ const DocumentUploadPage: React.FC<DocumentUploadPageProps> = ({
     if (token) {
       fetchData();
       interval = setInterval(() => {
-        if (viewRow === null) {
+        // Pause polling while a detail view is open
+        if (!detailOpen) {
           fetchData();
         }
       }, 5000);
@@ -801,7 +788,7 @@ const DocumentUploadPage: React.FC<DocumentUploadPageProps> = ({
     return () => {
       if (interval) clearInterval(interval);
     };
-  }, [viewRow, token]);
+  }, [detailOpen, token]);
 
   // Upload-Dialog: Datei auswählen
   const handleFileInputClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -997,15 +984,15 @@ const DocumentUploadPage: React.FC<DocumentUploadPageProps> = ({
 
   return (
     <div
-      onDragOver={viewRow === null ? handlePageDragOver : undefined}
-      onDragLeave={viewRow === null ? handlePageDragLeave : undefined}
-      onDrop={viewRow === null ? handlePageDrop : undefined}
+      onDragOver={!detailOpen ? handlePageDragOver : undefined}
+      onDragLeave={!detailOpen ? handlePageDragLeave : undefined}
+      onDrop={!detailOpen ? handlePageDrop : undefined}
       className={
-        pageDragActive && viewRow === null ? "relative bg-blue-50" : "relative"
+        pageDragActive && !detailOpen ? "relative bg-blue-50" : "relative"
       }
       style={{ minHeight: 400 }}
     >
-      {pageDragActive && viewRow === null && (
+      {pageDragActive && !detailOpen && (
         <div className="absolute inset-0 z-50 flex items-center justify-center bg-blue-100 bg-opacity-80 pointer-events-none">
           <div className="text-2xl text-blue-700 font-semibold border-2 border-blue-400 rounded-lg px-8 py-6 shadow-lg">
             {t("drag_drop_text", "PDF-Datei hierher ziehen zum Hochladen")}
@@ -1083,8 +1070,6 @@ const DocumentUploadPage: React.FC<DocumentUploadPageProps> = ({
         detailviewLinkFields={["filename"]}
         detailBasePath="/documentsupload"
         token={token}
-        viewRow={viewRow}
-        setViewRow={setViewRow}
         initialId={initialId}
         toolbarActions={ocrToolbarButton}
       />
