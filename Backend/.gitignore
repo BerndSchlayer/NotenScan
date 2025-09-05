@@ -16,3 +16,8 @@ ENV/
 # IDE
 .vscode/
 .idea/
+
+# yalc artifacts (don't commit)
+yalc.lock
+yalc.sig
+.yalc/
