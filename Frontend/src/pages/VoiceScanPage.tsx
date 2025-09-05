@@ -1,8 +1,12 @@
 // src/pages/Dashboard.jsx
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, lazy } from "react";
 import PDFViewer from "../components/PDFViewer";
-import { LoadingOverlay } from "@schlayer-consulting/sc-base-frontend";
-import { DataGrid } from "@schlayer-consulting/sc-base-frontend";
+const LoadingOverlay = lazy(() =>
+  import("@schlayer-consulting/sc-base-frontend").then((m) => ({ default: m.LoadingOverlay }))
+);
+const DataGrid = lazy(() =>
+  import("@schlayer-consulting/sc-base-frontend").then((m) => ({ default: m.DataGrid }))
+);
 import { useTranslation } from "react-i18next";
 
 // Server-URL aus .env lesen (Vite)

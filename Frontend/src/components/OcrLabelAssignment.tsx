@@ -1,6 +1,8 @@
-import React from "react";
+import React, { Suspense, lazy } from "react";
 import { Trash2 } from "lucide-react";
-import { FloatingSelect } from "@schlayer-consulting/sc-base-frontend";
+const FloatingSelect = lazy(() =>
+  import("@schlayer-consulting/sc-base-frontend").then((m) => ({ default: m.FloatingSelect }))
+);
 
 const labelColors = {
   Titel: "#0ea5e9",
@@ -69,6 +71,7 @@ const OcrLabelAssignment: React.FC<OcrLabelAssignmentProps> = ({
                 }}
               />
               <div className="pl-3">
+                <Suspense fallback={<div />}> 
                 <FloatingSelect
                   label={t(key, key)}
                   value={getValidDropdownValue(key as LabelKeys)}
@@ -82,6 +85,7 @@ const OcrLabelAssignment: React.FC<OcrLabelAssignmentProps> = ({
                   }))}
                   clearable={true}
                 />
+                </Suspense>
               </div>
             </div>
             {/* X-Icon zum Löschen ist jetzt im FloatingSelect integriert (clearable) */}

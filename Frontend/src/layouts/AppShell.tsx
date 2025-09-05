@@ -232,7 +232,7 @@ const AppShell: React.FC<AppShellProps> = ({ globalError, setGlobalError }) => {
         label: t(f.label),
         icon: React.createElement(f.icon, { size: 20 }),
       }))}
-  activeKey={feature ?? ""}
+      activeKey={feature ?? ""}
       onSelect={handleMenuClick}
       onPrefetch={prefetchFeature}
     >

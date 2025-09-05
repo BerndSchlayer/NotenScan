@@ -8,8 +8,12 @@ from dotenv import load_dotenv
 from sc_base_backend import get_settings, configure_logging, create_app, create_oauth_router
 from sc_base_backend.api.info import router as base_info_router
 import os
-from api.v1.institutions import router as institutions_router
-from api.v1.childcare_services import router as childcare_services_router
+from fastapi.staticfiles import StaticFiles
+from config import STATIC_DIR
+from api.v1.ocr import router as ocr_router
+from api.v1.musicsheets import router as musicsheets_router
+from api.v1.voices import router as voices_router
+from api.v1.pdf_tasks import router as pdf_tasks_router
 from fastapi.middleware.cors import CORSMiddleware
 
 load_dotenv()
@@ -33,9 +37,9 @@ app.include_router(create_oauth_router(), prefix=api_prefix)
 
 # eigene Router nur mit API-Präfix inkludieren
 app.include_router(ocr_router, prefix=api_prefix)
-app.include_router(musicsheets.router, prefix=api_prefix)
-app.include_router(voices.router, prefix=api_prefix)
-app.include_router(pdf_tasks.router, prefix=api_prefix)
+app.include_router(musicsheets_router, prefix=api_prefix)
+app.include_router(voices_router, prefix=api_prefix)
+app.include_router(pdf_tasks_router, prefix=api_prefix)
 
 # Static-Verzeichnis erstellen in dem die generierten PDFs gespeichert werden
 os.makedirs(STATIC_DIR, exist_ok=True)

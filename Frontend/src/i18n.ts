@@ -17,7 +17,6 @@ import frAppShell from "./locales/fr/AppShell.json";
 import frVoiceScanPage from "./locales/fr/VoiceScanPage.json";
 import frPDFViewer from "./locales/fr/PDFViewer.json";
 import frDocumentUploadPage from "./locales/fr/DocumentUploadPage.json";
-import { registerSCBaseFrontendI18n } from "@schlayer-consulting/sc-base-frontend";
 // Registriert Übersetzungen aus der geteilten UI-Bibliothek (z.B. DateInput)
 
 // Typdefinition für das Ressourcen-Objekt
@@ -84,14 +83,24 @@ i18n.use(initReactI18next).init({
 
 // Library-Übersetzungen registrieren (FloatingDateInput-namespace) NACH init,
 // damit init den Resource-Store nicht überschreibt
-registerSCBaseFrontendI18n();
-// sicherstellen, dass der Namespace geladen ist
-i18n.loadNamespaces("FloatingDateInput");
-i18n.loadNamespaces("FloatingTagInput");
-i18n.loadNamespaces("FloatingLookupSelect");
-i18n.loadNamespaces("LoadingOverlay");
-i18n.loadNamespaces("LanguageSwitcher");
-i18n.loadNamespaces("DataGrid");
-i18n.loadNamespaces("MasterDataTemplate");
+// Dynamisch die i18n-Registrierung aus der shared UI-Bibliothek laden,
+// damit diese Bibliothek nicht statisch in den Main-Chunk wandert.
+import("@schlayer-consulting/sc-base-frontend")
+  .then((m) => {
+    if (m && typeof m.registerSCBaseFrontendI18n === "function") {
+      m.registerSCBaseFrontendI18n();
+      // sicherstellen, dass die wichtigen Namespaces geladen sind
+      i18n.loadNamespaces("FloatingDateInput");
+      i18n.loadNamespaces("FloatingTagInput");
+      i18n.loadNamespaces("FloatingLookupSelect");
+      i18n.loadNamespaces("LoadingOverlay");
+      i18n.loadNamespaces("LanguageSwitcher");
+      i18n.loadNamespaces("DataGrid");
+      i18n.loadNamespaces("MasterDataTemplate");
+    }
+  })
+  .catch(() => {
+    // Fallback: falls die Library nicht verfügbar ist, ignorieren
+  });
 
 export default i18n;
